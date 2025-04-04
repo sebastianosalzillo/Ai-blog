@@ -14,6 +14,30 @@ body {
   background-color: #222;
 }
 
+.nav-bar {
+  background-color: #333;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-bar ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.nav-bar a:hover {
+  text-decoration: underline;
+}
+
 .app-title {
   font-size: 2rem;
   margin-bottom: 20px;
@@ -49,7 +73,7 @@ body {
 
 .article-title {
   margin-top: 0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .article-structured {
@@ -61,8 +85,8 @@ body {
   margin-bottom: 20px;
 }
 
-.article-introduzione h3,
-.article-conclusione h3 {
+.article-introduzione h2,
+.article-conclusione h2 {
   margin: 10px 0;
   color: #f0f0f0;
 }
@@ -71,7 +95,7 @@ body {
   margin-bottom: 15px;
 }
 
-.article-paragraph h4 {
+.article-paragraph h3 {
   margin: 5px 0;
   color: #ccc;
 }
