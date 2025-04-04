@@ -87,10 +87,15 @@ ${content}`;
     }
   }
 
-  // Genera l'immagine correlata alla notizia e restituisce un oggetto con l'immagine (Base64) e il prompt usato
+  // Genera l'immagine correlata alla notizia con titolo e breve descrizione
   async function generateArticleImage(content) {
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-    const imagePrompt = `Genera una rappresentazione visiva in alta qualità della seguente notizia, come se fosse una scena 3D realistica e dettagliata:\n\n${content}`;
+    const imagePrompt = `Genera un'immagine ad alta definizione che rappresenti la seguente notizia come se fosse una scena 3D realistica e dettagliata. L'immagine deve includere:
+1. Un titolo ben visibile (sovrapposto) che riassuma il tema principale.
+2. Una breve descrizione visiva posizionata nella parte inferiore.
+Assicurati che il titolo sia in alto e la descrizione in basso, in modo da enfatizzare il messaggio della notizia.
+Notizia:
+${content}`;
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash-exp-image-generation',
@@ -152,12 +157,9 @@ ${content}`;
         url: newsArticle.url || '#',
       },
       promptImmagine: imagePromptUsed,
-      tags: Array.isArray(newsArticle.tags)
-        ? newsArticle.tags
-        : ['Lavoro', 'News', 'AI Generated']
+      tags: ['Lavoro', 'News', 'AI Generated']
     };
 
-    // Salva l'oggetto articolo nel localStorage e aggiorna lo stato
     localStorage.setItem('articolo-lavoro', JSON.stringify(completeArticle));
     setArticle(completeArticle);
     setLoading(false);
@@ -218,10 +220,6 @@ ${content}`;
           <p className="article-tags">
             Tags: {article.tags ? article.tags.join(', ') : 'Nessun tag'}
           </p>
-          <div className="article-json-output">
-            <h3>Output JSON completo:</h3>
-            <pre>{JSON.stringify(article, null, 2)}</pre>
-          </div>
         </div>
       )}
     </div>
