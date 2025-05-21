@@ -1,0 +1,96 @@
+Unity Scene Setup for AI Shopkeeper Game
+
+This document outlines the steps to create the basic shop scene in the Unity Editor.
+
+**1. Create the Project Structure (if not already done):**
+   - UnityProject/
+     - Assets/
+       - Scenes/
+       - Scripts/ (contains PlayerMovement.cs)
+       - Prefabs/ (optional, for saving configured GameObjects)
+     - ProjectSettings/
+     - Packages/
+
+**2. Create the Shop Room:**
+   - Go to `GameObject > 3D Object > Plane` to create the Floor.
+     - Name it "Floor".
+     - Set its position to (0, 0, 0).
+     - Scale it to (5, 1, 5) to make a 50x50 unit floor (Planes are 10x10 units by default).
+   - Go to `GameObject > 3D Object > Cube` to create Walls.
+     - **Wall 1 (Back Wall):**
+       - Name it "Wall_Back".
+       - Position: (0, 2.5, 25) assuming floor is 50 units deep. (Adjust based on plane scale: if plane scale is (5,1,5) then plane is 50x50. So Z should be 25 if origin is center)
+       - Scale: (50, 5, 1) for a wall 50 units wide, 5 units high.
+     - **Wall 2 (Front Wall - Optional, or with Doorway):**
+       - Name it "Wall_Front".
+       - Position: (0, 2.5, -25)
+       - Scale: (50, 5, 1)
+     - **Wall 3 (Left Wall):**
+       - Name it "Wall_Left".
+       - Position: (-25, 2.5, 0)
+       - Scale: (1, 5, 50)
+     - **Wall 4 (Right Wall):**
+       - Name it "Wall_Right".
+       - Position: (25, 2.5, 0)
+       - Scale: (1, 5, 50)
+   - Go to `GameObject > 3D Object > Cube` to create the Ceiling.
+     - Name it "Ceiling".
+     - Position: (0, 5, 0) (assuming walls are 5 units high).
+     - Scale: (50, 1, 50).
+
+**3. Add the Shop Counter:**
+   - Go to `GameObject > 3D Object > Cube`.
+   - Name it "ShopCounter".
+   - Position: (0, 0.75, 15) (Place it somewhere in front of the back wall, adjust Y so it sits on the floor).
+   - Scale: (10, 1.5, 2) (A counter 10 units wide, 1.5 units high, 2 units deep).
+
+**4. Set up Basic Lighting:**
+   - If not already present, go to `GameObject > Light > Directional Light`.
+   - Name it "MainLight".
+   - Position: (0, 10, 0) (High up, adjust as needed).
+   - Rotation: (50, -30, 0) (Angled to cast some shadows, adjust for desired effect).
+   - Ensure its intensity is adequate (e.g., 1).
+
+**5. Represent the AI Shopkeeper:**
+   - Go to `GameObject > 3D Object > Capsule`.
+   - Name it "Shopkeeper".
+   - Position: (0, 1, 16) (Behind the counter, Y position ensures it's on the floor). Capsule default height is 2 units, so pivot is at 1 unit.
+   - Scale: (1, 1, 1) (Default capsule size, or adjust if needed).
+   - (Optional) Create a small Cube as a "head" and child it to the Shopkeeper capsule, adjusting its local position to be on top.
+
+**6. Implement Player Representation and Movement:**
+   - Go to `GameObject > 3D Object > Capsule`.
+   - Name it "Player".
+   - Position: (0, 1, -10) (Somewhere in the room, facing the counter).
+   - Scale: (1, 1, 1).
+   - **Remove the default Capsule Collider** component from the "Player" GameObject if you intend to use a CharacterController.
+   - Add a `CharacterController` component to the "Player" GameObject (`Component > Physics > Character Controller`).
+     - Adjust its `Center` to (0, 1, 0) if the capsule's pivot is at its base, or (0,0,0) if pivot is center. Unity's capsule primitive has its pivot at its geometric center. So if player height is 2m, the character controller center Y should be 0. Player GameObject position Y should be 1 so it stands on the ground.
+     - `Height`: 2
+     - `Radius`: 0.5
+   - **Main Camera Setup:**
+     - Find the "Main Camera" in the scene.
+     - Drag it onto the "Player" GameObject in the Hierarchy to make it a child of the Player.
+     - Reset the Main Camera's Transform component's `Position` to (0, 0.6, 0) relative to the Player (this places the camera around eye level within the capsule - assuming player capsule height is 2, eye level is ~1.6m from ground, so 0.6m from capsule center if Y is 0).
+     - Reset the Main Camera's `Rotation` to (0, 0, 0).
+   - **Attach PlayerMovement Script:**
+     - Select the "Player" GameObject.
+     - Drag the `PlayerMovement.cs` script (from `Assets/Scripts/`) onto the Inspector panel for the "Player" GameObject.
+     - In the Inspector for the `PlayerMovement` script component:
+       - Drag the "Player" GameObject itself to the `Player Body` field.
+       - Drag the "Main Camera" (which is now a child of "Player") to the `Player Camera` field.
+       - Adjust `Speed` and `Mouse Sensitivity` as desired.
+
+**7. Save the Scene:**
+   - Go to `File > Save Scenes As...`.
+   - Save the scene in the `Assets/Scenes/` directory (e.g., "ShopScene.unity").
+
+**Summary of Player Controller:**
+The player controller uses a C# script (`PlayerMovement.cs`) attached to a Capsule GameObject ("Player").
+- The Main Camera is parented to the Player capsule for a first-person view.
+- Movement (forward/backward/strafe) is handled by `Input.GetAxis("Horizontal")` and `Input.GetAxis("Vertical")`.
+- Mouse look (left/right rotation of the player body, up/down rotation of the camera) is handled by `Input.GetAxis("Mouse X")` and `Input.GetAxis("Mouse Y")`.
+- The script is designed to work with a `CharacterController` for collision-aware movement but includes a fallback to `transform.Translate` if no CharacterController is found.
+- Cursor is locked to the game window on start.
+
+This setup provides a basic interactive environment for the AI Shopkeeper game.
