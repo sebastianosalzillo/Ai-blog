@@ -61,6 +61,48 @@ body {
   .generate-button:hover:not(:disabled) {
     background-color: #006f98;
   }
+
+  .topic-input {
+    padding: 8px 12px;
+    font-size: 16px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #111;
+    color: #fff;
+  }
+
+  .delete-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #b00020;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .delete-button:hover {
+    background-color: #900018;
+  }
+
+  .download-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .download-button:hover {
+    background-color: #3d8b40;
+  }
   
   .article-card {
     border: 1px solid #444;

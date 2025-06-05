@@ -22,12 +22,24 @@ function App() {
     localStorage.setItem('articoli', JSON.stringify(newArticles));
   };
 
+  // Funzione per rimuovere un articolo esistente
+  const removeArticle = (id) => {
+    const remaining = articles.filter((a) => a.id !== id);
+    setArticles(remaining);
+    localStorage.setItem('articoli', JSON.stringify(remaining));
+  };
+
   return (
     <BrowserRouter>
       <NavBar articles={articles} />
       <Routes>
         <Route path="/" element={<Home addArticle={addArticle} />} />
-        <Route path="/article/:id" element={<ArticlePage articles={articles} />} />
+        <Route
+          path="/article/:id"
+          element={(
+            <ArticlePage articles={articles} removeArticle={removeArticle} />
+          )}
+        />
       </Routes>
     </BrowserRouter>
   );
