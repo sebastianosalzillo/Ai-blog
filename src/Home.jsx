@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { useNavigate } from 'react-router-dom';
 
-const NEWS_API_URL =
-  'https://newsapi.org/v2/everything?q=lavoro&language=it&apiKey=393cedd6a4d84b509aca0f06dff7944d';
 const GEMINI_API_KEY = 'AIzaSyAaenegCj9fk3ZKRxIhEcm9ZTqOxFMHH0g';
 
 function parseArticleJSON(text) {
@@ -24,9 +22,16 @@ function parseArticleJSON(text) {
 
 function Home({ addArticle }) {
   const [loading, setLoading] = useState(false);
+  const [topic, setTopic] = useState(() => localStorage.getItem('topic') || 'lavoro');
   const navigate = useNavigate();
 
-  async function fetchNews() {
+  useEffect(() => {
+    localStorage.setItem('topic', topic);
+  }, [topic]);
+
+  async function fetchNews(query) {
+    const NEWS_API_URL =
+      `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=it&apiKey=393cedd6a4d84b509aca0f06dff7944d`;
     try {
       const response = await fetch(NEWS_API_URL);
       const data = await response.json();
@@ -105,7 +110,7 @@ ${content}`;
 
   async function handleGenerate() {
     setLoading(true);
-    const newsArticle = await fetchNews();
+    const newsArticle = await fetchNews(topic);
     if (!newsArticle) {
       setLoading(false);
       return;
@@ -137,6 +142,13 @@ ${content}`;
   return (
     <div className="app-container">
       <h1 className="app-title">AI News Article Generator</h1>
+      <input
+        className="topic-input"
+        type="text"
+        value={topic}
+        onChange={(e) => setTopic(e.target.value)}
+        placeholder="Argomento delle notizie"
+      />
       <button className="generate-button" onClick={handleGenerate} disabled={loading}>
         {loading ? "Generazione in corso..." : "Genera Articolo"}
       </button>

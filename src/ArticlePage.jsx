@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function ArticlePage({ articles }) {
+function ArticlePage({ articles, removeArticle }) {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const navigate = useNavigate();
@@ -75,6 +75,29 @@ function ArticlePage({ articles }) {
         </p>
         <button className="generate-button" onClick={() => navigate('/')}>
           Torna alla Home
+        </button>
+        <button
+          className="download-button"
+          onClick={() => {
+            const data = `data:text/json;charset=utf-8,${encodeURIComponent(
+              JSON.stringify(article, null, 2),
+            )}`;
+            const link = document.createElement('a');
+            link.href = data;
+            link.download = `${article.titolo}.json`;
+            link.click();
+          }}
+        >
+          Scarica JSON
+        </button>
+        <button
+          className="delete-button"
+          onClick={() => {
+            removeArticle(article.id);
+            navigate('/');
+          }}
+        >
+          Elimina Articolo
         </button>
       </div>
     </div>
